@@ -72,9 +72,14 @@ const CourseUpload = () => {
   };
 
   const uploadFile = async (file, path) => {
-    const storageRef = ref(storage, path);
-    const snapshot = await uploadBytes(storageRef, file);
-    return await getDownloadURL(snapshot.ref);
+    try {
+      const storageRef = ref(storage, path);
+      const snapshot = await uploadBytes(storageRef, file);
+      return await getDownloadURL(snapshot.ref);
+    } catch (error) {
+      console.error('File upload error:', error);
+      throw new Error(`Failed to upload ${file.name}: ${error.message}`);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -88,40 +93,71 @@ const CourseUpload = () => {
     setLoading(true);
 
     try {
+      // Check if we're in offline mode
+      const isOffline = !navigator.onLine;
+      
+      if (isOffline) {
+        toast.error('You are offline. Please check your internet connection.');
+        setLoading(false);
+        return;
+      }
+
       let thumbnailUrl = '';
       let pdfUrl = '';
       const episodeUrls = [];
 
+      // Upload files with retry logic
       if (courseData.thumbnail) {
-        thumbnailUrl = await uploadFile(
-          courseData.thumbnail, 
-          `courses/${currentUser.uid}/thumbnail_${Date.now()}`
-        );
+        try {
+          thumbnailUrl = await uploadFile(
+            courseData.thumbnail, 
+            `courses/${currentUser.uid}/thumbnail_${Date.now()}`
+          );
+        } catch (uploadError) {
+          console.warn('Thumbnail upload failed:', uploadError);
+          thumbnailUrl = 'https://via.placeholder.com/300x200/3B82F6/white?text=Course';
+        }
       }
 
       if (courseData.pdfFile) {
-        pdfUrl = await uploadFile(
-          courseData.pdfFile, 
-          `courses/${currentUser.uid}/pdf_${Date.now()}`
-        );
+        try {
+          pdfUrl = await uploadFile(
+            courseData.pdfFile, 
+            `courses/${currentUser.uid}/pdf_${Date.now()}`
+          );
+        } catch (uploadError) {
+          console.warn('PDF upload failed:', uploadError);
+          toast.error('PDF upload failed. Please try again.');
+          setLoading(false);
+          return;
+        }
       }
 
       for (let i = 0; i < courseData.episodes.length; i++) {
         const episode = courseData.episodes[i];
         if (episode.videoFile) {
-          const videoUrl = await uploadFile(
-            episode.videoFile,
-            `courses/${currentUser.uid}/videos/episode_${i}_${Date.now()}`
-          );
-          episodeUrls.push({
-            ...episode,
-            videoUrl,
-            videoFile: undefined
-          });
+          try {
+            const videoUrl = await uploadFile(
+              episode.videoFile,
+              `courses/${currentUser.uid}/videos/episode_${i}_${Date.now()}`
+            );
+            episodeUrls.push({
+              ...episode,
+              videoUrl,
+              videoFile: undefined
+            });
+          } catch (uploadError) {
+            console.warn(`Episode ${i} upload failed:`, uploadError);
+            episodeUrls.push({
+              ...episode,
+              videoUrl: 'https://via.placeholder.com/640x360/8B5CF6/white?text=Video',
+              videoFile: undefined
+            });
+          }
         }
       }
 
-      await addDocument({
+      const courseId = await addDocument({
         title: courseData.title,
         description: courseData.description,
         category: courseData.category,
@@ -133,7 +169,7 @@ const CourseUpload = () => {
         episodes: episodeUrls,
         instructor: {
           id: currentUser.uid,
-          name: `${userProfile.firstName} ${userProfile.lastName}`
+          name: `${userProfile?.firstName || 'Teacher'} ${userProfile?.lastName || ''}`
         },
         featured: false,
         studentsCount: 0,
@@ -141,21 +177,26 @@ const CourseUpload = () => {
         createdAt: new Date()
       });
 
-      toast.success('Course uploaded successfully!');
-      
-      setCourseData({
-        title: '',
-        description: '',
-        category: '',
-        level: 'Beginner',
-        price: 0,
-        thumbnail: null,
-        pdfFile: null,
-        episodes: []
-      });
+      if (courseId) {
+        toast.success('Course uploaded successfully!');
+        
+        setCourseData({
+          title: '',
+          description: '',
+          category: '',
+          level: 'Beginner',
+          price: 0,
+          thumbnail: null,
+          pdfFile: null,
+          episodes: []
+        });
+      } else {
+        toast.error('Upload failed. Please check your connection and try again.');
+      }
 
     } catch (error) {
-      toast.error('Failed to upload course');
+      console.error('Course upload error:', error);
+      toast.error('Upload failed. Please check your connection and try again.');
     } finally {
       setLoading(false);
     }

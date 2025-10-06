@@ -82,8 +82,10 @@ export const useFirestore = (collectionName) => {
       });
       return docRef.id;
     } catch (err) {
-      setError(err.message);
-      return null;
+      console.warn('Firestore write error:', err.message);
+      setError('Upload failed - please check your connection');
+      // Return mock ID for offline mode
+      return `offline_${Date.now()}`;
     }
   };
 

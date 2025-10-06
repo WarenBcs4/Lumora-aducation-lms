@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Header from './components/Layout/Header';
+import NetworkStatus from './components/Common/NetworkStatus';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import Login from './components/Auth/Login';
@@ -35,6 +36,7 @@ function AppContent() {
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
             </Routes>
           </main>
+          <NetworkStatus />
           <Toaster position="top-right" />
         </div>
   );
