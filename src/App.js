@@ -13,6 +13,7 @@ import CourseDetail from './pages/CourseDetail';
 import MyLearning from './pages/MyLearning';
 import TeacherDashboard from './pages/TeacherDashboard';
 import CourseUpload from './components/Teacher/CourseUpload';
+import TestUpload from './pages/TestUpload';
 import AdminDashboard from './components/Admin/Dashboard';
 import './App.css';
 
@@ -33,6 +34,7 @@ function AppContent() {
               <Route path="/my-learning" element={<MyLearning />} />
               <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
               <Route path="/teacher/upload" element={<CourseUpload />} />
+              <Route path="/test-upload" element={<TestUpload />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
             </Routes>
           </main>

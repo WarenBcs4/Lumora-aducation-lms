@@ -74,25 +74,28 @@ export const useFirestore = (collectionName) => {
 
   // Add document
   const addDocument = async (data) => {
+    console.log('Adding document to collection:', collectionName);
+    
     try {
-      // Add timeout to prevent hanging
-      const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Upload timeout')), 10000)
-      );
-      
-      const uploadPromise = addDoc(collection(db, collectionName), {
+      const docData = {
         ...data,
         createdAt: new Date(),
         updatedAt: new Date()
-      });
+      };
       
-      const docRef = await Promise.race([uploadPromise, timeoutPromise]);
+      console.log('Attempting to write to Firestore...');
+      const docRef = await addDoc(collection(db, collectionName), docData);
+      
+      console.log('✅ Document successfully written to Firestore with ID:', docRef.id);
+      setError(null);
       return docRef.id;
     } catch (err) {
-      console.warn('Firestore write error:', err.message);
-      setError('Upload failed - please check your connection');
-      // Return mock ID for offline mode
-      return `offline_${Date.now()}`;
+      console.error('❌ Firestore write failed:', err);
+      console.error('Error code:', err.code);
+      console.error('Error message:', err.message);
+      
+      setError(`Database connection failed: ${err.message}`);
+      throw err;
     }
   };
 

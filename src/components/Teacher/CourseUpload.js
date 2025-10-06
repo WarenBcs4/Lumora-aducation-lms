@@ -85,60 +85,67 @@ const CourseUpload = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!currentUser || userProfile?.role !== 'teacher') {
-      toast.error('Only teachers can upload courses');
+    if (!courseData.title || !courseData.description || !courseData.category) {
+      toast.error('Please fill in all required fields');
       return;
     }
 
     setLoading(true);
+    console.log('Starting course creation...');
 
     try {
-      // Skip file uploads for now - create course with placeholder URLs
-      const courseId = await addDocument({
+      const newCourse = {
         title: courseData.title,
         description: courseData.description,
         category: courseData.category,
         level: courseData.level,
-        price: parseFloat(courseData.price),
-        thumbnail: 'https://via.placeholder.com/300x200/3B82F6/white?text=Course',
-        pdfUrl: courseData.pdfFile ? 'https://via.placeholder.com/400x600/10B981/white?text=PDF' : '',
+        price: parseFloat(courseData.price) || 0,
+        thumbnail: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=300&h=200&fit=crop',
+        pdfUrl: courseData.pdfFile ? 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=600&fit=crop' : '',
         pdfId: `pdf_${Date.now()}`,
-        episodes: courseData.episodes.map((episode, index) => ({
-          id: `episode_${index}`,
+        episodes: courseData.episodes.length > 0 ? courseData.episodes.map((episode, index) => ({
+          id: `episode_${index + 1}`,
           title: episode.title || `Episode ${index + 1}`,
           duration: episode.duration || '10:00',
-          videoUrl: 'https://via.placeholder.com/640x360/8B5CF6/white?text=Video'
-        })),
+          videoUrl: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=640&h=360&fit=crop'
+        })) : [{
+          id: 'episode_1',
+          title: 'Introduction',
+          duration: '15:00',
+          videoUrl: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=640&h=360&fit=crop'
+        }],
         instructor: {
-          id: currentUser.uid,
-          name: `${userProfile?.firstName || 'Teacher'} ${userProfile?.lastName || ''}`
+          id: currentUser?.uid || 'demo_teacher',
+          name: `${userProfile?.firstName || 'Demo'} ${userProfile?.lastName || 'Teacher'}`
         },
         featured: false,
         studentsCount: 0,
-        rating: 0,
+        rating: 4.5,
         createdAt: new Date()
+      };
+
+      console.log('Course data prepared:', newCourse);
+      
+      console.log('Calling addDocument...');
+      const courseId = await addDocument(newCourse);
+      
+      console.log('Course successfully saved to database with ID:', courseId);
+      toast.success(`Course created successfully! ID: ${courseId}`);
+      
+      setCourseData({
+        title: '',
+        description: '',
+        category: '',
+        level: 'Beginner',
+        price: 0,
+        thumbnail: null,
+        pdfFile: null,
+        episodes: []
       });
 
-      if (courseId && courseId !== `offline_${Date.now()}`) {
-        toast.success('Course created successfully!');
-        
-        setCourseData({
-          title: '',
-          description: '',
-          category: '',
-          level: 'Beginner',
-          price: 0,
-          thumbnail: null,
-          pdfFile: null,
-          episodes: []
-        });
-      } else {
-        toast.error('Upload failed. Please check your connection.');
-      }
-
     } catch (error) {
-      console.error('Course upload error:', error);
-      toast.error('Upload failed. Please try again.');
+      console.error('Course creation error:', error);
+      toast.error(`Failed to create course: ${error.message}`);
     } finally {
       setLoading(false);
     }
