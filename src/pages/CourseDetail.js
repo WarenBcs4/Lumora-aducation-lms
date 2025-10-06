@@ -6,6 +6,8 @@ import { useAuth } from '../contexts/AuthContext';
 import PDFViewer from '../components/Course/PDFViewer';
 import VideoPlayer from '../components/Course/VideoPlayer';
 import PaymentModal from '../components/Payment/PaymentModal';
+import ReviewSystem from '../components/Course/ReviewSystem';
+import ProgressTracker from '../components/Course/ProgressTracker';
 import toast from 'react-hot-toast';
 
 const CourseDetail = () => {
@@ -136,11 +138,21 @@ const CourseDetail = () => {
                 </div>
               )}
 
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-gray-600 mb-4">
                 • First 10 PDF pages free<br/>
                 • First video episode free<br/>
                 • Full access after purchase
               </div>
+              
+              {enrolled && (
+                <ProgressTracker 
+                  courseId={id}
+                  userId={currentUser?.uid}
+                  progress={Math.random() * 100}
+                  completedSections={[]}
+                  totalSections={course.episodes?.length || 0}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -248,10 +260,8 @@ const CourseDetail = () => {
               />
             )}
 
-            {activeTab === 'reviews' && (
-              <div className="text-center py-8 text-gray-500">
-                Reviews feature coming soon...
-              </div>
+            {activeTab === 'reviews' && enrolled && (
+              <ReviewSystem courseId={id} />
             )}
 
             {!enrolled && activeTab !== 'overview' && (

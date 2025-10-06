@@ -10,6 +10,8 @@ import Register from './components/Auth/Register';
 import Courses from './pages/Courses';
 import CourseDetail from './pages/CourseDetail';
 import MyLearning from './pages/MyLearning';
+import TeacherDashboard from './pages/TeacherDashboard';
+import CourseUpload from './components/Teacher/CourseUpload';
 import AdminDashboard from './components/Admin/Dashboard';
 import './App.css';
 
@@ -28,6 +30,8 @@ function AppContent() {
               <Route path="/courses" element={<Courses />} />
               <Route path="/course/:id" element={<CourseDetail />} />
               <Route path="/my-learning" element={<MyLearning />} />
+              <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
+              <Route path="/teacher/upload" element={<CourseUpload />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
             </Routes>
           </main>
