@@ -14,18 +14,28 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        setCurrentUser(user);
-        // Fetch user profile from Firestore
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
-        if (userDoc.exists()) {
-          setUserProfile(userDoc.data());
+      try {
+        if (user) {
+          setCurrentUser(user);
+          // Fetch user profile from Firestore
+          const userDoc = await getDoc(doc(db, 'users', user.uid));
+          if (userDoc.exists()) {
+            setUserProfile(userDoc.data());
+          }
+        } else {
+          setCurrentUser(null);
+          setUserProfile(null);
         }
-      } else {
-        setCurrentUser(null);
-        setUserProfile(null);
+      } catch (error) {
+        console.warn('Firebase connection error:', error.message);
+        // Continue with auth state even if Firestore fails
+        if (user) {
+          setCurrentUser(user);
+          setUserProfile({ firstName: 'User', role: 'student' });
+        }
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     });
 
     return unsubscribe;

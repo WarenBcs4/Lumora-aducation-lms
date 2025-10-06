@@ -13,6 +13,7 @@ import {
   onSnapshot 
 } from 'firebase/firestore';
 import { db } from '../services/firebase';
+import { getOfflineData } from '../utils/offlineData';
 
 export const useFirestore = (collectionName) => {
   const [documents, setDocuments] = useState([]);
@@ -44,7 +45,11 @@ export const useFirestore = (collectionName) => {
       setDocuments(docs);
       setError(null);
     } catch (err) {
-      setError(err.message);
+      console.warn('Firestore error:', err.message);
+      setError('Connection issue - working in offline mode');
+      // Use offline data when Firebase is unavailable
+      const offlineData = getOfflineData(collectionName, conditions);
+      setDocuments(offlineData);
     } finally {
       setLoading(false);
     }
