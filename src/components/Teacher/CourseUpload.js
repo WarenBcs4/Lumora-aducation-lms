@@ -93,80 +93,22 @@ const CourseUpload = () => {
     setLoading(true);
 
     try {
-      // Check if we're in offline mode
-      const isOffline = !navigator.onLine;
-      
-      if (isOffline) {
-        toast.error('You are offline. Please check your internet connection.');
-        setLoading(false);
-        return;
-      }
-
-      let thumbnailUrl = '';
-      let pdfUrl = '';
-      const episodeUrls = [];
-
-      // Upload files with retry logic
-      if (courseData.thumbnail) {
-        try {
-          thumbnailUrl = await uploadFile(
-            courseData.thumbnail, 
-            `courses/${currentUser.uid}/thumbnail_${Date.now()}`
-          );
-        } catch (uploadError) {
-          console.warn('Thumbnail upload failed:', uploadError);
-          thumbnailUrl = 'https://via.placeholder.com/300x200/3B82F6/white?text=Course';
-        }
-      }
-
-      if (courseData.pdfFile) {
-        try {
-          pdfUrl = await uploadFile(
-            courseData.pdfFile, 
-            `courses/${currentUser.uid}/pdf_${Date.now()}`
-          );
-        } catch (uploadError) {
-          console.warn('PDF upload failed:', uploadError);
-          toast.error('PDF upload failed. Please try again.');
-          setLoading(false);
-          return;
-        }
-      }
-
-      for (let i = 0; i < courseData.episodes.length; i++) {
-        const episode = courseData.episodes[i];
-        if (episode.videoFile) {
-          try {
-            const videoUrl = await uploadFile(
-              episode.videoFile,
-              `courses/${currentUser.uid}/videos/episode_${i}_${Date.now()}`
-            );
-            episodeUrls.push({
-              ...episode,
-              videoUrl,
-              videoFile: undefined
-            });
-          } catch (uploadError) {
-            console.warn(`Episode ${i} upload failed:`, uploadError);
-            episodeUrls.push({
-              ...episode,
-              videoUrl: 'https://via.placeholder.com/640x360/8B5CF6/white?text=Video',
-              videoFile: undefined
-            });
-          }
-        }
-      }
-
+      // Skip file uploads for now - create course with placeholder URLs
       const courseId = await addDocument({
         title: courseData.title,
         description: courseData.description,
         category: courseData.category,
         level: courseData.level,
         price: parseFloat(courseData.price),
-        thumbnail: thumbnailUrl,
-        pdfUrl,
+        thumbnail: 'https://via.placeholder.com/300x200/3B82F6/white?text=Course',
+        pdfUrl: courseData.pdfFile ? 'https://via.placeholder.com/400x600/10B981/white?text=PDF' : '',
         pdfId: `pdf_${Date.now()}`,
-        episodes: episodeUrls,
+        episodes: courseData.episodes.map((episode, index) => ({
+          id: `episode_${index}`,
+          title: episode.title || `Episode ${index + 1}`,
+          duration: episode.duration || '10:00',
+          videoUrl: 'https://via.placeholder.com/640x360/8B5CF6/white?text=Video'
+        })),
         instructor: {
           id: currentUser.uid,
           name: `${userProfile?.firstName || 'Teacher'} ${userProfile?.lastName || ''}`
@@ -177,8 +119,8 @@ const CourseUpload = () => {
         createdAt: new Date()
       });
 
-      if (courseId) {
-        toast.success('Course uploaded successfully!');
+      if (courseId && courseId !== `offline_${Date.now()}`) {
+        toast.success('Course created successfully!');
         
         setCourseData({
           title: '',
@@ -191,12 +133,12 @@ const CourseUpload = () => {
           episodes: []
         });
       } else {
-        toast.error('Upload failed. Please check your connection and try again.');
+        toast.error('Upload failed. Please check your connection.');
       }
 
     } catch (error) {
       console.error('Course upload error:', error);
-      toast.error('Upload failed. Please check your connection and try again.');
+      toast.error('Upload failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -389,8 +331,12 @@ const CourseUpload = () => {
             disabled={loading}
             className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 disabled:opacity-50 font-medium"
           >
-            {loading ? 'Uploading...' : 'Upload Course'}
+            {loading ? 'Creating Course...' : 'Create Course'}
           </button>
+          
+          <p className="text-sm text-gray-500 text-center mt-2">
+            Note: File uploads are temporarily disabled. Course will be created with placeholder content.
+          </p>
         </form>
       </div>
     </div>

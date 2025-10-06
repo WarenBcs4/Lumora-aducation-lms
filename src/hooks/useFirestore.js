@@ -75,11 +75,18 @@ export const useFirestore = (collectionName) => {
   // Add document
   const addDocument = async (data) => {
     try {
-      const docRef = await addDoc(collection(db, collectionName), {
+      // Add timeout to prevent hanging
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Upload timeout')), 10000)
+      );
+      
+      const uploadPromise = addDoc(collection(db, collectionName), {
         ...data,
         createdAt: new Date(),
         updatedAt: new Date()
       });
+      
+      const docRef = await Promise.race([uploadPromise, timeoutPromise]);
       return docRef.id;
     } catch (err) {
       console.warn('Firestore write error:', err.message);
