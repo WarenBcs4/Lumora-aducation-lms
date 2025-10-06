@@ -8,6 +8,7 @@ import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import Courses from './pages/Courses';
 import CourseDetail from './pages/CourseDetail';
+import MyLearning from './pages/MyLearning';
 import AdminDashboard from './components/Admin/Dashboard';
 import './App.css';
 
@@ -24,6 +25,7 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/courses" element={<Courses />} />
               <Route path="/course/:id" element={<CourseDetail />} />
+              <Route path="/my-learning" element={<MyLearning />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
             </Routes>
           </main>
