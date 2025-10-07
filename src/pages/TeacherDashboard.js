@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useFirestore } from '../hooks/useFirestore';
-import { BookOpen, Users, DollarSign, TrendingUp, Plus, Edit, Eye } from 'lucide-react';
+import { BookOpen, Users, DollarSign, TrendingUp, Plus, Upload, BarChart3, Settings, Search, Bell, MessageCircle, Play, FileText, Video } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, LineChart, Line } from 'recharts';
 
 const TeacherDashboard = () => {
   const { currentUser, userProfile } = useAuth();
