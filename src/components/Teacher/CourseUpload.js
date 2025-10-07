@@ -153,211 +153,243 @@ const CourseUpload = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <div className="bg-white rounded-lg shadow-md p-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Upload New Course</h1>
-        
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Course Title</label>
-              <input
-                type="text"
-                name="title"
-                required
-                value={courseData.title}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
-              <select
-                name="category"
-                required
-                value={courseData.category}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">Select Category</option>
-                {categories.map(cat => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
-              </select>
-            </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-12 px-4">
+      <div className="max-w-2xl mx-auto">
+        <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-10">
+          <div className="text-center mb-10">
+            <h1 className="text-3xl font-light text-slate-800 mb-3" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>Create New Course</h1>
+            <p className="text-slate-500 font-light">Share your knowledge with the world</p>
           </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
-            <textarea
-              name="description"
-              required
-              rows={4}
-              value={courseData.description}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Level</label>
-              <select
-                name="level"
-                value={courseData.level}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                {levels.map(level => (
-                  <option key={level} value={level}>{level}</option>
-                ))}
-              </select>
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Price ($)</label>
-              <input
-                type="number"
-                name="price"
-                min="0"
-                step="0.01"
-                value={courseData.price}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Thumbnail Image</label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
+          
+          <form onSubmit={handleSubmit} className="space-y-8">
+            <div className="space-y-6">
+              <div>
                 <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleFileUpload(e, 'thumbnail')}
-                  className="hidden"
-                  id="thumbnail-upload"
+                  type="text"
+                  name="title"
+                  required
+                  placeholder="Course Title"
+                  value={courseData.title}
+                  onChange={handleInputChange}
+                  className="w-full px-0 py-4 text-lg bg-transparent border-0 border-b border-slate-200 focus:border-blue-400 focus:outline-none transition-colors duration-300 placeholder-slate-400"
+                  style={{fontFamily: 'Inter, system-ui, sans-serif'}}
                 />
-                <label htmlFor="thumbnail-upload" className="cursor-pointer flex flex-col items-center">
-                  <Upload className="h-8 w-8 text-gray-400 mb-2" />
-                  <span className="text-sm text-gray-600">
-                    {courseData.thumbnail ? courseData.thumbnail.name : 'Click to upload thumbnail'}
-                  </span>
-                </label>
+              </div>
+              
+              <div>
+                <select
+                  name="category"
+                  required
+                  value={courseData.category}
+                  onChange={handleInputChange}
+                  className="w-full px-0 py-4 text-lg bg-transparent border-0 border-b border-slate-200 focus:border-blue-400 focus:outline-none transition-colors duration-300 text-slate-600"
+                  style={{fontFamily: 'Inter, system-ui, sans-serif'}}
+                >
+                  <option value="" className="text-slate-400">Select Category</option>
+                  {categories.map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <textarea
+                  name="description"
+                  required
+                  rows={4}
+                  placeholder="Course Description"
+                  value={courseData.description}
+                  onChange={handleInputChange}
+                  className="w-full px-0 py-4 text-lg bg-transparent border-0 border-b border-slate-200 focus:border-blue-400 focus:outline-none transition-colors duration-300 placeholder-slate-400 resize-none"
+                  style={{fontFamily: 'Inter, system-ui, sans-serif'}}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-8">
+                <div>
+                  <select
+                    name="level"
+                    value={courseData.level}
+                    onChange={handleInputChange}
+                    className="w-full px-0 py-4 text-lg bg-transparent border-0 border-b border-slate-200 focus:border-blue-400 focus:outline-none transition-colors duration-300 text-slate-600"
+                    style={{fontFamily: 'Inter, system-ui, sans-serif'}}
+                  >
+                    {levels.map(level => (
+                      <option key={level} value={level}>{level}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                <div>
+                  <input
+                    type="number"
+                    name="price"
+                    min="0"
+                    step="0.01"
+                    placeholder="Price ($)"
+                    value={courseData.price}
+                    onChange={handleInputChange}
+                    className="w-full px-0 py-4 text-lg bg-transparent border-0 border-b border-slate-200 focus:border-blue-400 focus:outline-none transition-colors duration-300 placeholder-slate-400"
+                    style={{fontFamily: 'Inter, system-ui, sans-serif'}}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-8">
+                <div>
+                  <div className="relative group">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleFileUpload(e, 'thumbnail')}
+                      className="hidden"
+                      id="thumbnail-upload"
+                    />
+                    <label 
+                      htmlFor="thumbnail-upload" 
+                      className="cursor-pointer flex flex-col items-center justify-center h-32 border-2 border-dashed border-slate-200 rounded-2xl hover:border-blue-300 hover:bg-blue-50/30 transition-all duration-300 group"
+                    >
+                      <Upload className="h-8 w-8 text-slate-400 group-hover:text-blue-400 transition-colors duration-300 mb-2" />
+                      <span className="text-sm text-slate-500 group-hover:text-blue-500 transition-colors duration-300" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>
+                        {courseData.thumbnail ? courseData.thumbnail.name : 'Upload Thumbnail'}
+                      </span>
+                    </label>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="relative group">
+                    <input
+                      type="file"
+                      accept=".pdf"
+                      onChange={(e) => handleFileUpload(e, 'pdfFile')}
+                      className="hidden"
+                      id="pdf-upload"
+                    />
+                    <label 
+                      htmlFor="pdf-upload" 
+                      className="cursor-pointer flex flex-col items-center justify-center h-32 border-2 border-dashed border-slate-200 rounded-2xl hover:border-blue-300 hover:bg-blue-50/30 transition-all duration-300 group"
+                    >
+                      <FileText className="h-8 w-8 text-slate-400 group-hover:text-blue-400 transition-colors duration-300 mb-2" />
+                      <span className="text-sm text-slate-500 group-hover:text-blue-500 transition-colors duration-300" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>
+                        {courseData.pdfFile ? courseData.pdfFile.name : 'Upload PDF'}
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              {courseData.episodes.length > 0 && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-light text-slate-700" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>Video Episodes</h3>
+                    <button
+                      type="button"
+                      onClick={addEpisode}
+                      className="flex items-center px-4 py-2 text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-xl transition-all duration-300"
+                      style={{fontFamily: 'Inter, system-ui, sans-serif'}}
+                    >
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add Episode
+                    </button>
+                  </div>
+
+                  {courseData.episodes.map((episode, index) => (
+                    <div key={episode.id} className="bg-slate-50/50 rounded-2xl p-6 border border-slate-100">
+                      <div className="flex items-center justify-between mb-4">
+                        <h4 className="font-medium text-slate-700" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>Episode {index + 1}</h4>
+                        <button
+                          type="button"
+                          onClick={() => removeEpisode(index)}
+                          className="text-slate-400 hover:text-red-500 transition-colors duration-300"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4 mb-4">
+                        <input
+                          type="text"
+                          placeholder="Episode title"
+                          value={episode.title}
+                          onChange={(e) => updateEpisode(index, 'title', e.target.value)}
+                          className="px-0 py-3 bg-transparent border-0 border-b border-slate-200 focus:border-blue-400 focus:outline-none transition-colors duration-300 placeholder-slate-400"
+                          style={{fontFamily: 'Inter, system-ui, sans-serif'}}
+                        />
+                        <input
+                          type="text"
+                          placeholder="Duration (e.g., 10:30)"
+                          value={episode.duration}
+                          onChange={(e) => updateEpisode(index, 'duration', e.target.value)}
+                          className="px-0 py-3 bg-transparent border-0 border-b border-slate-200 focus:border-blue-400 focus:outline-none transition-colors duration-300 placeholder-slate-400"
+                          style={{fontFamily: 'Inter, system-ui, sans-serif'}}
+                        />
+                      </div>
+
+                      <div>
+                        <input
+                          type="file"
+                          accept="video/*"
+                          onChange={(e) => updateEpisode(index, 'videoFile', e.target.files[0])}
+                          className="hidden"
+                          id={`video-upload-${index}`}
+                        />
+                        <label 
+                          htmlFor={`video-upload-${index}`} 
+                          className="cursor-pointer flex items-center justify-center border-2 border-dashed border-slate-200 rounded-xl p-4 hover:border-blue-300 hover:bg-blue-50/30 transition-all duration-300 group"
+                        >
+                          <Video className="h-5 w-5 text-slate-400 group-hover:text-blue-400 transition-colors duration-300 mr-2" />
+                          <span className="text-sm text-slate-500 group-hover:text-blue-500 transition-colors duration-300" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>
+                            {episode.videoFile ? episode.videoFile.name : 'Upload video'}
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="flex justify-center">
+                <button
+                  type="button"
+                  onClick={addEpisode}
+                  className="flex items-center px-6 py-3 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-xl transition-all duration-300 border border-blue-200 hover:border-blue-300"
+                  style={{fontFamily: 'Inter, system-ui, sans-serif'}}
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Video Episode
+                </button>
               </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Course PDF</label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
-                <input
-                  type="file"
-                  accept=".pdf"
-                  onChange={(e) => handleFileUpload(e, 'pdfFile')}
-                  className="hidden"
-                  id="pdf-upload"
-                />
-                <label htmlFor="pdf-upload" className="cursor-pointer flex flex-col items-center">
-                  <FileText className="h-8 w-8 text-gray-400 mb-2" />
-                  <span className="text-sm text-gray-600">
-                    {courseData.pdfFile ? courseData.pdfFile.name : 'Click to upload PDF'}
-                  </span>
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium text-gray-900">Video Episodes</h3>
+            <div className="pt-6">
               <button
-                type="button"
-                onClick={addEpisode}
-                className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                type="submit"
+                disabled={loading}
+                className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white py-4 px-8 rounded-2xl font-medium transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100 shadow-lg hover:shadow-xl"
+                style={{fontFamily: 'Inter, system-ui, sans-serif'}}
               >
-                <Plus className="h-4 w-4 mr-2" />
-                Add Episode
+                {loading ? 'Creating Course...' : 'Create Course'}
               </button>
             </div>
-
-            {courseData.episodes.map((episode, index) => (
-              <div key={episode.id} className="border border-gray-200 rounded-lg p-4 mb-4">
-                <div className="flex items-center justify-between mb-4">
-                  <h4 className="font-medium text-gray-900">Episode {index + 1}</h4>
-                  <button
-                    type="button"
-                    onClick={() => removeEpisode(index)}
-                    className="text-red-600 hover:text-red-700"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
+            
+            <div className="bg-blue-50/50 border border-blue-100 rounded-2xl p-6">
+              <div className="flex items-start space-x-3">
+                <div className="flex-shrink-0 mt-1">
+                  <svg className="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                  </svg>
                 </div>
-
-                <div className="grid md:grid-cols-2 gap-4 mb-4">
-                  <input
-                    type="text"
-                    placeholder="Episode title"
-                    value={episode.title}
-                    onChange={(e) => updateEpisode(index, 'title', e.target.value)}
-                    className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Duration (e.g., 10:30)"
-                    value={episode.duration}
-                    onChange={(e) => updateEpisode(index, 'duration', e.target.value)}
-                    className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
+                <div>
+                  <h3 className="text-sm font-medium text-blue-800 mb-1" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>Quick Course Creation</h3>
+                  <p className="text-sm text-blue-700 font-light leading-relaxed" style={{fontFamily: 'Inter, system-ui, sans-serif'}}>
+                    File uploads are temporarily disabled for faster processing. Your course will be created instantly with professional placeholder content.
+                  </p>
                 </div>
-
-                <div className="mb-4">
-                  <input
-                    type="file"
-                    accept="video/*"
-                    onChange={(e) => updateEpisode(index, 'videoFile', e.target.files[0])}
-                    className="hidden"
-                    id={`video-upload-${index}`}
-                  />
-                  <label 
-                    htmlFor={`video-upload-${index}`} 
-                    className="cursor-pointer flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-4"
-                  >
-                    <Video className="h-6 w-6 text-gray-400 mr-2" />
-                    <span className="text-sm text-gray-600">
-                      {episode.videoFile ? episode.videoFile.name : 'Click to upload video'}
-                    </span>
-                  </label>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 disabled:opacity-50 font-medium"
-          >
-            {loading ? 'Creating Course...' : 'Create Course'}
-          </button>
-          
-          <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <div className="flex items-start space-x-3">
-              <div className="flex-shrink-0">
-                <svg className="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium text-blue-800">Quick Course Creation</h3>
-                <p className="text-sm text-blue-700 mt-1">
-                  File uploads are temporarily disabled for faster processing. Your course will be created instantly with professional placeholder content that you can update later.
-                </p>
               </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );
