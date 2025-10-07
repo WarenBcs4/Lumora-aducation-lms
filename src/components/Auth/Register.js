@@ -39,7 +39,8 @@ const Register = () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
       
-      await setDoc(doc(db, 'users', userCredential.user.uid), {
+      // Create user profile without waiting
+      setDoc(doc(db, 'users', userCredential.user.uid), {
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
@@ -47,10 +48,10 @@ const Register = () => {
         createdAt: new Date(),
         enrolledCourses: [],
         purchasedContent: []
-      });
+      }).catch(err => console.warn('Profile creation failed:', err));
 
-      toast.success('Account created successfully!');
-      navigate('/');
+      toast.success('Account created! Please login to continue.');
+      navigate('/login');
     } catch (error) {
       toast.error(error.message);
     } finally {
