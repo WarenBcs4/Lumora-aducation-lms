@@ -6,7 +6,6 @@ import Header from './components/Layout/Header';
 import NetworkStatus from './components/Common/NetworkStatus';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
-import ModernDashboard from './pages/ModernDashboard';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import Courses from './pages/Courses';
@@ -20,35 +19,21 @@ import AdminDashboard from './components/Admin/Dashboard';
 import './App.css';
 
 function AppContent() {
-  const { currentUser, userProfile } = useAuth();
-  
-  const getDashboardComponent = () => {
-    if (!currentUser) return <Home />;
-    
-    switch (userProfile?.role) {
-      case 'teacher':
-        return <ModernTeacherDashboard />;
-      case 'admin':
-        return <AdminDashboard />;
-      default:
-        return <ModernDashboard />;
-    }
-  };
+  const { currentUser } = useAuth();
   
   return (
     <div className="App">
       <Header />
       <main>
             <Routes>
-              <Route path="/" element={getDashboardComponent()} />
+              <Route path="/" element={currentUser ? <Dashboard /> : <Home />} />
               <Route path="/home" element={<Home />} />
-              <Route path="/dashboard" element={<ModernDashboard />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/courses" element={<Courses />} />
               <Route path="/course/:id" element={<CourseDetail />} />
               <Route path="/my-learning" element={<MyLearning />} />
-              <Route path="/teacher-dashboard" element={<ModernTeacherDashboard />} />
+              <Route path="/teacher/dashboard" element={<ModernTeacherDashboard />} />
               <Route path="/teacher/upload" element={<CourseUpload />} />
               <Route path="/test-upload" element={<TestUpload />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
