@@ -27,12 +27,9 @@ export const AuthProvider = ({ children }) => {
           setUserProfile(null);
         }
       } catch (error) {
-        console.warn('Firebase connection error:', error.message);
-        // Continue with auth state even if Firestore fails
-        if (user) {
-          setCurrentUser(user);
-          setUserProfile({ firstName: 'User', role: 'student' });
-        }
+        console.error('Firebase connection error:', error.message);
+        setCurrentUser(null);
+        setUserProfile(null);
       } finally {
         setLoading(false);
       }
