@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useFirestore } from '../hooks/useFirestore';
 import { Search, Bell, BookOpen, Clock, TrendingUp, Users, Award, Calendar } from 'lucide-react';
@@ -35,6 +36,10 @@ const Dashboard = () => {
 
   useEffect(() => {
     getDocuments();
+  }, []);
+
+  useEffect(() => {
+    getDocuments(); // Load all courses
   }, []);
 
   useEffect(() => {
@@ -133,7 +138,7 @@ const Dashboard = () => {
               </div>
               <div className="grid md:grid-cols-2 gap-4">
                 {recentCourses.map((course, index) => (
-                  <div key={course.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                  <Link key={course.id} to={`/course/${course.id}`} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow block">
                     <div className="flex items-start space-x-3">
                       <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
                         ['bg-blue-100', 'bg-purple-100', 'bg-green-100', 'bg-orange-100'][index % 4]
@@ -145,16 +150,13 @@ const Dashboard = () => {
                       <div className="flex-1">
                         <h3 className="font-medium text-gray-900 mb-1">{course.title}</h3>
                         <p className="text-sm text-gray-600 mb-2">{course.category}</p>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div 
-                            className="bg-blue-600 h-2 rounded-full" 
-                            style={{ width: `${Math.random() * 100}%` }}
-                          ></div>
+                        <div className="text-sm text-green-600 font-medium">
+                          ${course.pricing?.fullCoursePrice || course.price || 0}
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  </Link>
+                ))
               </div>
             </div>
 

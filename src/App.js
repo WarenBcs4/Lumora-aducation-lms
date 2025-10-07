@@ -30,7 +30,7 @@ function AppContent() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/courses" element={<Courses />} />
-              <Route path="/course/:id" element={<CourseDetail />} />
+              <Route path="/course/:id" element={<ProtectedRoute><CourseDetail /></ProtectedRoute>} />
               <Route path="/my-learning" element={<MyLearning />} />
               <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
               <Route path="/teacher/upload" element={<CourseUpload />} />

@@ -31,11 +31,16 @@ const MyLearning = () => {
   }, []);
 
   useEffect(() => {
-    if (allCourses.length && userProfile?.enrolledCourses) {
-      const enrolled = allCourses.filter(course => 
-        userProfile.enrolledCourses.includes(course.id)
-      );
-      setEnrolledCourses(enrolled);
+    if (allCourses.length) {
+      if (userProfile?.enrolledCourses) {
+        const enrolled = allCourses.filter(course => 
+          userProfile.enrolledCourses.includes(course.id)
+        );
+        setEnrolledCourses(enrolled);
+      } else {
+        // Show all courses for demo if no enrollment data
+        setEnrolledCourses(allCourses.slice(0, 3));
+      }
     }
   }, [allCourses, userProfile]);
 
