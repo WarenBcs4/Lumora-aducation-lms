@@ -45,11 +45,16 @@ export const useFirestore = (collectionName) => {
       setDocuments(docs);
       setError(null);
     } catch (err) {
-      console.warn('Firestore error:', err.message);
-      setError('Connection issue - working in offline mode');
-      // Use offline data when Firebase is unavailable
-      const offlineData = getOfflineData(collectionName, conditions);
-      setDocuments(offlineData);
+      console.warn('Firestore connection error:', err.message);
+      if (err.code === 'unavailable' || err.message.includes('transport errored')) {
+        console.log('Using offline mode due to connection issues');
+        setError('Working in offline mode');
+        const offlineData = getOfflineData(collectionName, conditions);
+        setDocuments(offlineData);
+      } else {
+        setError(err.message);
+        setDocuments([]);
+      }
     } finally {
       setLoading(false);
     }

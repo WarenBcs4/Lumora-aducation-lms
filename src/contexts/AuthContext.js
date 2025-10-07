@@ -27,9 +27,17 @@ export const AuthProvider = ({ children }) => {
           setUserProfile(null);
         }
       } catch (error) {
-        console.error('Firebase connection error:', error.message);
-        setCurrentUser(null);
-        setUserProfile(null);
+        console.warn('Firebase connection error:', error.message);
+        if (error.code === 'unavailable' || error.message.includes('transport errored')) {
+          console.log('Firestore unavailable, keeping user authenticated');
+          if (user) {
+            setCurrentUser(user);
+            setUserProfile({ firstName: user.displayName || 'User', role: 'student' });
+          }
+        } else {
+          setCurrentUser(null);
+          setUserProfile(null);
+        }
       } finally {
         setLoading(false);
       }
