@@ -6,6 +6,7 @@ import Header from './components/Layout/Header';
 import NetworkStatus from './components/Common/NetworkStatus';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
+
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import Courses from './pages/Courses';
@@ -19,14 +20,32 @@ import AdminDashboard from './components/Admin/Dashboard';
 import './App.css';
 
 function AppContent() {
-  const { currentUser } = useAuth();
+  const { currentUser, userProfile } = useAuth();
+  
+  const getDashboardComponent = () => {
+    if (!currentUser) return <Home />;
+    
+    switch (userProfile?.role) {
+      case 'teacher':
+        return <ModernTeacherDashboard />;
+      case 'admin':
+        return <AdminDashboard />;
+      default:
+        return <Dashboard />;
+    }
+  };
+  
+  const isDashboardRoute = () => {
+    const path = window.location.pathname;
+    return path === '/' && currentUser;
+  };
   
   return (
     <div className="App">
-      <Header />
+      {!isDashboardRoute() && <Header />}
       <main>
             <Routes>
-              <Route path="/" element={currentUser ? <Dashboard /> : <Home />} />
+              <Route path="/" element={getDashboardComponent()} />
               <Route path="/home" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
