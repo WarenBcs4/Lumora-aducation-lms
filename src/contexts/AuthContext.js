@@ -21,15 +21,24 @@ export const AuthProvider = ({ children }) => {
           const userDoc = await getDoc(doc(db, 'users', user.uid));
           if (userDoc.exists()) {
             setUserProfile(userDoc.data());
+          } else {
+            // Keep user authenticated even if no profile exists
+            setUserProfile({ firstName: user.displayName || 'User', role: 'student' });
           }
         } else {
           setCurrentUser(null);
           setUserProfile(null);
         }
       } catch (error) {
-        console.error('Firebase connection error:', error.message);
-        setCurrentUser(null);
-        setUserProfile(null);
+        console.warn('Firebase connection error:', error.message);
+        // Keep user authenticated if Firestore fails
+        if (user) {
+          setCurrentUser(user);
+          setUserProfile({ firstName: user.displayName || 'User', role: 'student' });
+        } else {
+          setCurrentUser(null);
+          setUserProfile(null);
+        }
       } finally {
         setLoading(false);
       }
