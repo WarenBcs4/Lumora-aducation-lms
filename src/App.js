@@ -35,14 +35,9 @@ function AppContent() {
     }
   };
   
-  const isDashboardRoute = () => {
-    const path = window.location.pathname;
-    return path === '/' && currentUser;
-  };
-  
   return (
     <div className="App">
-      {!isDashboardRoute() && <Header />}
+      <Header />
       <main>
             <Routes>
               <Route path="/" element={getDashboardComponent()} />
