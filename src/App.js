@@ -14,6 +14,7 @@ import MyLearning from './pages/MyLearning';
 import TeacherDashboard from './pages/TeacherDashboard';
 import CourseUpload from './components/Teacher/CourseUpload';
 import TestUpload from './pages/TestUpload';
+import ProtectedRoute from './components/Common/ProtectedRoute';
 import AdminDashboard from './components/Admin/Dashboard';
 import './App.css';
 
@@ -30,7 +31,7 @@ function AppContent() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/courses" element={<Courses />} />
-              <Route path="/course/:id" element={<ProtectedRoute><CourseDetail /></ProtectedRoute>} />
+              <Route path="/course/:id" element={<CourseDetail />} />
               <Route path="/my-learning" element={<MyLearning />} />
               <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
               <Route path="/teacher/upload" element={<CourseUpload />} />

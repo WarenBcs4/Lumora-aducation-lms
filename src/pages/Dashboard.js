@@ -39,10 +39,6 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    getDocuments(); // Load all courses
-  }, []);
-
-  useEffect(() => {
     if (courses.length) {
       setRecentCourses(courses.slice(0, 4));
     }
@@ -156,7 +152,7 @@ const Dashboard = () => {
                       </div>
                     </div>
                   </Link>
-                ))
+                ))}
               </div>
             </div>
 
