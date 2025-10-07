@@ -45,9 +45,9 @@ const Dashboard = () => {
   }, [courses]);
 
   const stats = [
-    { label: 'Enrolled Courses', value: userProfile?.enrolledCourses?.length || 0, icon: BookOpen, color: 'bg-blue-500' },
-    { label: 'Hours Learned', value: '24.5', icon: Clock, color: 'bg-purple-500' },
-    { label: 'Certificates', value: '3', icon: Award, color: 'bg-green-500' },
+    { label: 'Available Courses', value: courses.length || 0, icon: BookOpen, color: 'bg-orange-500' },
+    { label: 'Hours Learned', value: '24.5', icon: Clock, color: 'bg-orange-400' },
+    { label: 'Certificates', value: '3', icon: Award, color: 'bg-orange-600' },
     { label: 'Study Streak', value: '12 days', icon: TrendingUp, color: 'bg-orange-500' }
   ];
 
@@ -126,28 +126,29 @@ const Dashboard = () => {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Left Column */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Recent Courses */}
+            {/* Available Courses */}
             <div className="bg-white rounded-xl p-6 shadow-sm">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold text-gray-900">Continue Learning</h2>
-                <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">View All</button>
+                <h2 className="text-xl font-semibold text-gray-900">Available Courses</h2>
+                <Link to="/courses" className="text-orange-600 hover:text-orange-700 text-sm font-medium">View All</Link>
               </div>
               <div className="grid md:grid-cols-2 gap-4">
                 {recentCourses.map((course, index) => (
-                  <Link key={course.id} to={`/course/${course.id}`} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow block">
+                  <Link key={course.id} to={`/course/${course.id}`} className="group border border-gray-200 hover:border-orange-200 rounded-xl p-4 hover:shadow-lg transition-all duration-300 block">
                     <div className="flex items-start space-x-3">
-                      <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
-                        ['bg-blue-100', 'bg-purple-100', 'bg-green-100', 'bg-orange-100'][index % 4]
-                      }`}>
-                        <BookOpen className={`h-6 w-6 ${
-                          ['text-blue-600', 'text-purple-600', 'text-green-600', 'text-orange-600'][index % 4]
-                        }`} />
+                      <div className="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center group-hover:bg-orange-100 transition-colors duration-300">
+                        <BookOpen className="h-6 w-6 text-orange-600" />
                       </div>
                       <div className="flex-1">
-                        <h3 className="font-medium text-gray-900 mb-1">{course.title}</h3>
+                        <h3 className="font-medium text-gray-900 mb-1 group-hover:text-orange-600 transition-colors duration-300">{course.title}</h3>
                         <p className="text-sm text-gray-600 mb-2">{course.category}</p>
-                        <div className="text-sm text-green-600 font-medium">
-                          ${course.pricing?.fullCoursePrice || course.price || 0}
+                        <div className="flex items-center justify-between">
+                          <div className="text-sm font-medium text-orange-600">
+                            {(course.pricing?.fullCoursePrice || course.price || 0) === 0 ? 'Free' : `$${course.pricing?.fullCoursePrice || course.price}`}
+                          </div>
+                          <span className="text-xs bg-orange-50 text-orange-600 px-2 py-1 rounded-full">
+                            {course.level}
+                          </span>
                         </div>
                       </div>
                     </div>

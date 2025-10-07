@@ -9,7 +9,7 @@ const Home = () => {
   const [featuredCourses, setFeaturedCourses] = useState([]);
 
   useEffect(() => {
-    getDocuments([{ field: 'featured', operator: '==', value: true }]);
+    getDocuments();
   }, []);
 
   useEffect(() => {
