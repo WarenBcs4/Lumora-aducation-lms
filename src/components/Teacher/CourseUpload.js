@@ -96,32 +96,33 @@ const CourseUpload = () => {
     try {
       const newCourse = {
         title: courseData.title,
+        slug: courseData.title.toLowerCase().replace(/\s+/g, '-'),
         description: courseData.description,
         category: courseData.category,
         level: courseData.level,
-        price: parseFloat(courseData.price) || 0,
-        thumbnail: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=300&h=200&fit=crop',
-        pdfUrl: courseData.pdfFile ? 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=600&fit=crop' : '',
-        pdfId: `pdf_${Date.now()}`,
-        episodes: courseData.episodes.length > 0 ? courseData.episodes.map((episode, index) => ({
-          id: `episode_${index + 1}`,
-          title: episode.title || `Episode ${index + 1}`,
-          duration: episode.duration || '10:00',
-          videoUrl: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=640&h=360&fit=crop'
-        })) : [{
-          id: 'episode_1',
-          title: 'Introduction',
-          duration: '15:00',
-          videoUrl: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=640&h=360&fit=crop'
-        }],
-        instructor: {
-          id: currentUser?.uid || 'demo_teacher',
-          name: `${userProfile?.firstName || 'Demo'} ${userProfile?.lastName || 'Teacher'}`
+        
+        pricing: {
+          type: parseFloat(courseData.price) > 0 ? 'paid' : 'free',
+          fullCoursePrice: parseFloat(courseData.price) || 0,
+          currency: 'USD'
         },
-        featured: false,
-        studentsCount: 0,
-        rating: 4.5,
-        createdAt: new Date()
+        
+        thumbnail: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=300&h=200&fit=crop',
+        
+        instructorId: currentUser?.uid,
+        instructorName: `${userProfile?.firstName || 'Demo'} ${userProfile?.lastName || 'Teacher'}`,
+        
+        totalEnrollments: 0,
+        activeStudents: 0,
+        averageRating: 0,
+        totalReviews: 0,
+        
+        status: 'published',
+        isPublished: true,
+        isFeatured: false,
+        
+        createdAt: new Date(),
+        updatedAt: new Date()
       };
 
       console.log('Course data prepared:', newCourse);
